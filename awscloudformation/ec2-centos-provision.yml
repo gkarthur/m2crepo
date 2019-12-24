@@ -1,0 +1,103 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  Create EC2 instances dedicated for provisionning and manage others instances.
+  Type OS : CentOS
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
+    Type: 'AWS::EC2::KeyPair::KeyName'
+    Default: gkarthur-redhat001
+    ConstraintDescription: must be the name of an existing EC2 KeyPair.
+  MasterInstanceType:
+    Description: Master EC2 instance type
+    Type: String
+    Default: t2.nano
+    AllowedValues:
+      - t2.nano
+      - t2.micro     
+Mappings:
+  RegionMap:
+    us-east-1:
+      AMI: ami-01ed306a12b7d1c96
+    us-east-2:
+      AMI: ami-01ed306a12b7d1c96
+    us-west-1:
+      AMI: ami-01ed306a12b7d1c96
+    us-west-2:
+      AMI: ami-01ed306a12b7d1c96
+Resources:
+  ProvisionVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.200.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: m2cProvisionVPC
+  LabInternetGateway:
+    Type: AWS::EC2::InternetGateway
+  VPCGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+        VpcId: !Ref ProvisionVPC
+        InternetGatewayId: !Ref LabInternetGateway
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref ProvisionVPC
+      CidrBlock: 10.200.10.0/24
+      MapPublicIpOnLaunch: true
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref ProvisionVPC
+  InternetRoute:
+    Type: AWS::EC2::Route
+    DependsOn: LabInternetGateway
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref LabInternetGateway
+      RouteTableId: !Ref PublicRouteTable
+  SubnetARouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet1
+  SSHSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: 'Internet Group'
+      GroupDescription: "SSH traffic in, all traffic out."
+      VpcId: !Ref ProvisionVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+  MasterEC2:
+    Type: AWS::EC2::Instance 
+    Properties:
+      ImageId: !FindInMap
+        - RegionMap
+        - !Ref 'AWS::Region'
+        - AMI
+      SecurityGroupIds:
+        - !Ref SSHSecurityGroup     
+      InstanceType: !Ref MasterInstanceType
+      KeyName: !Ref KeyName
+      SubnetId: !Ref PublicSubnet1
+      BlockDeviceMappings:
+      - DeviceName: /dev/sda1
+        Ebs:
+          VolumeType: gp2
+          DeleteOnTermination: true
+          VolumeSize: 10
+      PrivateIpAddress: 10.200.10.90
+      Tags:
+        - Key: Name
+          Value: m2cProvisionEC2
