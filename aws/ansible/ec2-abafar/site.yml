@@ -1,0 +1,9 @@
+---
+# This playbook deploy a basic ec2 instance.
+
+- hosts: 127.0.0.1
+  connection: local
+  
+  roles:
+  - ec2
+

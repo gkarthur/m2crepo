@@ -1,0 +1,12 @@
+- hosts: all
+
+  tasks:
+  - name: install basics tools in servers
+    yum:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - wget
+      - unzip
+      - git
+

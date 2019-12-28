@@ -1,12 +1,12 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
-  Create EC2 instances dedicated for provisionning and manage others instances.
+  Create a basic EC2 instance for general uc.
   Type OS : CentOS
 Parameters:
   KeyName:
     Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
     Type: 'AWS::EC2::KeyPair::KeyName'
-    Default: gkarthur-redhat001
+    Default: {{ KeyName }}
     ConstraintDescription: must be the name of an existing EC2 KeyPair.
   MasterInstanceType:
     Description: Master EC2 instance type
@@ -26,33 +26,33 @@ Mappings:
     us-west-2:
       AMI: ami-01ed306a12b7d1c96
 Resources:
-  ProvisionVPC:
+  AbafarVPC:
     Type: AWS::EC2::VPC
     Properties:
-      CidrBlock: 10.200.0.0/16
+      CidrBlock: 10.201.0.0/16
       EnableDnsSupport: true
       EnableDnsHostnames: true
       InstanceTenancy: default
       Tags:
         - Key: Name
-          Value: m2cProvisionVPC
+          Value: AbafarVPC  
   LabInternetGateway:
     Type: AWS::EC2::InternetGateway
   VPCGatewayAttachment:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
-        VpcId: !Ref ProvisionVPC
+        VpcId: !Ref AbafarVPC
         InternetGatewayId: !Ref LabInternetGateway
   PublicSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
-      VpcId: !Ref ProvisionVPC
-      CidrBlock: 10.200.10.0/24
+      VpcId: !Ref AbafarVPC
+      CidrBlock: 10.201.10.0/24
       MapPublicIpOnLaunch: true
   PublicRouteTable:
     Type: AWS::EC2::RouteTable
     Properties:
-      VpcId: !Ref ProvisionVPC
+      VpcId: !Ref AbafarVPC
   InternetRoute:
     Type: AWS::EC2::Route
     DependsOn: LabInternetGateway
@@ -70,7 +70,7 @@ Resources:
     Properties:
       GroupName: 'Internet Group'
       GroupDescription: "SSH traffic in, all traffic out."
-      VpcId: !Ref ProvisionVPC
+      VpcId: !Ref AbafarVPC
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: '22'
@@ -96,8 +96,10 @@ Resources:
         Ebs:
           VolumeType: gp2
           DeleteOnTermination: true
-          VolumeSize: 10
-      PrivateIpAddress: 10.200.10.90
+          VolumeSize: 8
+      PrivateIpAddress: 10.201.10.90
       Tags:
         - Key: Name
-          Value: m2cProvisionEC2
+          Value: abafarEC2
+        - Key: ClusterName
+          Value: abafar
