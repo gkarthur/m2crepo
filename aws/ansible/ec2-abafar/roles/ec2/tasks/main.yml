@@ -1,6 +1,8 @@
+- name: Install init script
+  copy: src=create_stack.sh dest=/tmp mode=0755
 
 - name: Copy stack EC2 in temp folder
   template: src=ec2.yml dest=/tmp/
 
 - name: Create stack
-  command: create_stack.sh
+  command: /tmp/create_stack.sh
