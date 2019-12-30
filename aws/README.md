@@ -1,17 +1,17 @@
-# AWS Induz
+# M2C AWS Induz
 
 
 ## Step 1 : Init administrator AWS CLI and API
 
-Go to AWS console and select IAM service
-Create new user with following entries:
-creation user = m2cAdminCLI 
-group = m2cAdminAccess, permission (policy=AdministratorAccess)
-Assign group to user
+Go to AWS console and select IAM service  
+Create new user with following entries:  
+creation user = m2cAdminCLI  
+group = m2cAdminAccess, permission (policy=AdministratorAccess)  
+Assign group to user  
 
-For this user, generate access and secret key
-Access key ID = AKIAZ5KTK6QFDGVYYFXO
-Secret access key = 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
+For this user, generate access and secret key  
+Access key ID = AKIAZ5KTK6QFDGVYYFXO  
+Secret access key = 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  
 
 
 ## Step 2 : Installation of VM Provision
@@ -24,8 +24,8 @@ Get source code from Github
 git clone https://github.com/.../m2crepo.git
 ```
 
-Go to AWS console and select CloudFormation service
-Create Stack, et load file m2crepo\aws\ansible\ec2-centos-provision.yml
+Go to AWS console and select CloudFormation service.  
+Create Stack, and load file m2crepo\aws\ansible\ec2-centos-provision.yml  
 
 Connect to VM provision via SSH and configure as follow
 
