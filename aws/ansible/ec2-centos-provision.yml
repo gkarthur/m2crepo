@@ -37,6 +37,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref ProvisionVPC
+      AvailabilityZone: us-west-2a
       CidrBlock: 10.200.10.0/24
       MapPublicIpOnLaunch: true
   PublicRouteTable:
@@ -83,7 +84,7 @@ Resources:
         Ebs:
           VolumeType: gp2
           DeleteOnTermination: true
-          VolumeSize: 10
+          VolumeSize: 8
       PrivateIpAddress: 10.200.10.90
       Tags:
         - Key: Name

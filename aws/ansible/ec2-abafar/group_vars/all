@@ -1,3 +1,4 @@
 # The global variable file installation
 
 KeyName: gkarthur-redhat001
+AvailabilityZone: us-west-2a

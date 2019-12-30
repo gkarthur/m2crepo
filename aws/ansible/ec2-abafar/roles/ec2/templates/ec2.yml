@@ -11,7 +11,7 @@ Parameters:
   MasterInstanceType:
     Description: Master EC2 instance type
     Type: String
-    Default: t2.nano
+    Default: t2.micro
     AllowedValues:
       - t2.nano
       - t2.micro     
@@ -47,6 +47,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref AbafarVPC
+      AvailabilityZone: {{ AvailabilityZone }}
       CidrBlock: 10.201.10.0/24
       MapPublicIpOnLaunch: true
   PublicRouteTable:
