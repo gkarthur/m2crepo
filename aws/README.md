@@ -38,11 +38,11 @@ chmod +x m2crepo/sandbox/*.sh
 ./m2crepo/sandbox/init-provision.sh
 ```
 
-Create a new VM with ansible. For instance we will deploy Abafar stack with specific playbook
+Create a new VM with Ansible + AWS CLI (v2). For instance we will deploy Abafar stack with specific playbook
 
 ```
-export AWS_ACCESS_KEY_ID='AKIAZ5KTK6QFDGVYYFXO'
-export AWS_SECRET_ACCESS_KEY='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'
+export AWS_ACCESS_KEY_ID='AKIAZ5KTK6QFEOJPZI66'
+export AWS_SECRET_ACCESS_KEY='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'
 cd m2crepo/aws/ansible/ec2-abafar
 ansible-playbook site.yml
 ```
