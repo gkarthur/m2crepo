@@ -33,9 +33,9 @@ Connect to VM provision via SSH and configure as follow
 ssh -i gkarthur-redhat001.pem centos@<dns-vm-provision>
 sudo yum install git -y
 git clone https://github.com/gkarthur/m2crepo.git
-chmod +x m2crepo/ansible/ec2inventory/ec2.py
-chmod +x m2crepo/sandbox/*.sh
-./m2crepo/sandbox/init-provision.sh
+chmod +x /home/centos/m2crepo/ansible/ec2inventory/ec2.py
+chmod +x /home/centos/m2crepo/sandbox/*.sh
+./home/centos/m2crepo/sandbox/init-provision.sh
 ```
 
 Create a new VM with Ansible + AWS CLI (v2). For instance we will deploy Abafar stack with specific playbook
@@ -43,12 +43,24 @@ Create a new VM with Ansible + AWS CLI (v2). For instance we will deploy Abafar 
 ```
 export AWS_ACCESS_KEY_ID='AKIAZ5KTK6QFEOJPZI66'
 export AWS_SECRET_ACCESS_KEY='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'
-cd m2crepo/aws/ansible/ec2-abafar
+cd /home/centos/m2crepo/aws/ansible/ec2-abafar
 ansible-playbook site.yml
 ```
 
 ## Etape 4 : Deploy software to any VM with ansible
 
+This chapter aims to deploy a basics playbook for install git wget and unzip on remote VM. In AWS context with dynamic DNS we need use EC2 inventory to get recent DNS by tag filter. 
+
+```
+scp -i gkarthur-redhat001.pem gkarthur-redhat001.pem centos@<dns-vm-provision>:/home/centos
+ssh -i gkarthur-redhat001.pem centos@<dns-vm-provision>
+sudo chmod 600 /home/centos/gkarthur-redhat001.pem
+cd /home/centos/m2crepo/ansible/ec2inventory/
+export AWS_ACCESS_KEY_ID='AKIAZ5KTK6QFEOJPZI66'
+export AWS_SECRET_ACCESS_KEY='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'
+export EC2_INSTANCE_FILTERS='tag:ClusterName=abafar'
+ansible-playbook -v -i ec2.py -u centos --private-key /home/centos/gkarthur-redhat001.pem -b /home/centos/m2crepo/ansible/playbook/basics.yml
+```
 
 ## Etape 5 : Création service de suppression VM
 
