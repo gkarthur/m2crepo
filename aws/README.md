@@ -25,7 +25,7 @@ git clone https://github.com/.../m2crepo.git
 ```
 
 Go to AWS console and select CloudFormation service.  
-Create Stack, and load file m2crepo\aws\ansible\ec2-centos-provision.yml  
+Create Stack, and load file m2crepo\aws\cloudformation\ec2-centos-provision.yml  
 
 Connect to VM provision via SSH and configure as follow
 
