@@ -13,7 +13,6 @@ For this user, generate access and secret key
 Access key ID = AKIAZ5KTK6QFDGVYYFXO  
 Secret access key = 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  
 
-
 ## Step 2 : Installation of VM Provision
 
 VM provision aims to create VM to AWS platform.
@@ -33,9 +32,9 @@ Connect to VM provision via SSH and configure as follow
 ssh -i gkarthur-redhat001.pem centos@<dns-vm-provision>
 sudo yum install git -y
 git clone https://github.com/gkarthur/m2crepo.git
-chmod +x /home/centos/m2crepo/ansible/ec2inventory/ec2.py
-chmod +x /home/centos/m2crepo/sandbox/*.sh
-./home/centos/m2crepo/sandbox/init-provision.sh
+chmod +x /home/centos/m2crepo/aws/ansible/ec2inventory/ec2.py
+chmod +x /home/centos/m2crepo/aws/sh/*.sh
+./home/centos/m2crepo/aws/sh/init-provision.sh
 ```
 
 Create a new VM with Ansible + AWS CLI (v2). For instance we will deploy Abafar stack with specific playbook
@@ -55,7 +54,7 @@ This chapter aims to deploy a basics playbook for install git wget and unzip on 
 scp -i gkarthur-redhat001.pem gkarthur-redhat001.pem centos@<dns-vm-provision>:/home/centos
 ssh -i gkarthur-redhat001.pem centos@<dns-vm-provision>
 sudo chmod 600 /home/centos/gkarthur-redhat001.pem
-cd /home/centos/m2crepo/ansible/ec2inventory/
+cd /home/centos/m2crepo/aws/ansible/ec2inventory/
 export AWS_ACCESS_KEY_ID='AKIAZ5KTK6QFEOJPZI66'
 export AWS_SECRET_ACCESS_KEY='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'
 export EC2_INSTANCE_FILTERS='tag:ClusterName=abafar'
