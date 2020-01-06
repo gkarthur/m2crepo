@@ -10,8 +10,8 @@ group = m2cAdminAccess, permission (policy=AdministratorAccess)
 Assign group to user  
 
 For this user, generate access and secret key  
-Access key ID = AKIAZ5KTK6QFDGVYYFXO  
-Secret access key = 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  
+Access key ID = <AWS Access Key ID>  
+Secret access key = <AWS Secret Key>  
 
 ## Step 2 : Installation of VM Provision
 
@@ -40,8 +40,8 @@ chmod +x /home/centos/m2crepo/aws/sh/*.sh
 Create a new VM with Ansible + AWS CLI (v2). For instance we will deploy Abafar stack with specific playbook
 
 ```
-export AWS_ACCESS_KEY_ID='AKIAZ5KTK6QFEOJPZI66'
-export AWS_SECRET_ACCESS_KEY='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'
+export AWS_ACCESS_KEY_ID='<AWS Access Key ID>'
+export AWS_SECRET_ACCESS_KEY='<AWS Secret Key>'
 cd /home/centos/m2crepo/aws/ansible/ec2-abafar
 ansible-playbook site.yml
 ```
@@ -55,8 +55,8 @@ scp -i gkarthur-redhat001.pem gkarthur-redhat001.pem centos@<dns-vm-provision>:/
 ssh -i gkarthur-redhat001.pem centos@<dns-vm-provision>
 sudo chmod 600 /home/centos/gkarthur-redhat001.pem
 cd /home/centos/m2crepo/aws/ansible/ec2inventory/
-export AWS_ACCESS_KEY_ID='AKIAZ5KTK6QFEOJPZI66'
-export AWS_SECRET_ACCESS_KEY='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'
+export AWS_ACCESS_KEY_ID='<AWS Access Key ID>'
+export AWS_SECRET_ACCESS_KEY='<AWS Secret Key>'
 export EC2_INSTANCE_FILTERS='tag:ClusterName=abafar'
 ansible-playbook -v -i ec2.py -u centos --private-key /home/centos/gkarthur-redhat001.pem -b /home/centos/m2crepo/ansible/playbook/basics.yml
 ```
